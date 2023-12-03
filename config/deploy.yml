@@ -26,7 +26,7 @@ registry:
   # server: registry.digitalocean.com / ghcr.io / ...
   username: igorj
   password:
-    - KAMAL_REGISTRY_PASSWORD
+    - DOCKER_REGISTRY_PASSWORD
 
 # Check /up against 80
 healthcheck:

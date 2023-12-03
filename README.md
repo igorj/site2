@@ -1,30 +1,18 @@
-# Skiff-test
+# Kamal static site template
 
-This site is managed by [Skiff](https://github.com/basecamp/kamal-skiff).
+This is a template for a static site that can easily be deployed to a single server together with other static sites with [Kamal](https://kamal-deploy.org/).
 
-## Local development
+The site is automatically configured with SSL certificates from [Let's Encrypt](https://letsencrypt.org/), and is served via [nginx](https://nginx.org/).
 
-If you have a Ruby environment available, you can install Skiff globally with:
+## First setup
 
-```sh
-gem install kamal-skiff
-```
-
-...otherwise, you can run a dockerized version via an alias (add this to your .bashrc or similar to simplify re-use). On macOS, use:
+On a freshly created server, run:
 
 ```sh
-alias skiff="docker run -it --rm -v '${PWD}:/workdir' -v '/run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock' -e SSH_AUTH_SOCK='/run/host-services/ssh-auth.sock' -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/basecamp/kamal-skiff:latest"
+ssh root@SERVER_IP_ADDRESS -- mkdir -p /letsencrypt && touch /letsencrypt/acme.json && chmod 600 /letsencrypt/acme.json
 ```
 
-Then run `skiff dev` to start the development server.
-
-## Deploying changes to production (or staging)
-
-Changes checked into git are automatically pulled onto the Skiff server every 10 seconds. So all you have to do is checkin your changes and push them.
-
-If you need to change the nginx configuration in `config/server.conf`, make your changes to that file, check them into git and push, and then run `skiff restart` to test the configuration file and restart the server if it's valid.
-
-## Deploying the site for the first time
+Than edit the `.env` file and `config/deploy.yml` and enter your configuration.
 
 First ensure that you've set `GIT_URL` to a repository address with a valid access token embedded in the `.env` file. This access token must have access to pull from the git repository in question (see [personal access tokens for GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) for an example).
 
@@ -32,8 +20,12 @@ Then you must also setup an access token for your Docker image repository (see [
 
 Finally, you must add the server address into `config/deploy.yml`, and ensure that the image and repository configurations are correct.
 
-Now you're ready to run `skiff deploy` to deploy your site to the server. This will install Docker on your server (using `apt-get`), if it isn't already available.
+Than run `kamal setup` to setup the server for the first time.
 
-## Flushing etag caches after changing include files
+## Deploying configuration changes
 
-Skiff uses [Server Side Includes](https://nginx.org/en/docs/http/ngx_http_ssi_module.html), which can change independently of your individual HTML files. When that happens, the caching etags for those latter files will not be updated automatically to reflect the change. You can run `skiff flush` to touch all the public HTML files, which will flush the etag cache.
+If you change the configuration, run `kamal deploy` to deploy the changes to the server. It takes about 60 seconds.
+
+## Deploying site changes
+
+Changes checked into git are automatically pulled onto the Kamal server every 10 seconds. So all you have to do is checkin your changes and push them.
