@@ -46,7 +46,7 @@ traefik:
     entryPoints.web.http.redirections.entryPoint.scheme: https
     entryPoints.web.http.redirections.entrypoint.permanent: true
     entrypoints.websecure.http.tls: true
-    entrypoints.websecure.http.tls.domains[1].main: "site2.masterybits.com"
+    entrypoints.websecure.http.tls.domains[2|.main: "site2.masterybits.com"
     certificatesResolvers.letsencrypt.acme.email: "igorj@hey.com"
     certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json"
     certificatesResolvers.letsencrypt.acme.httpchallenge: true
