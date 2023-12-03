@@ -22,6 +22,14 @@ Finally, you must add the server address into `config/deploy.yml`, and ensure th
 
 Than run `kamal setup` to setup the server for the first time.
 
+## Adding a new site to the server
+
+1. Create a new git repository for the project
+2. Edit `.env` and `config/deploy.yml`
+3. Push the changes to git
+4. Run: `kamal env push`
+5. Run `kamal deploy`
+
 ## Deploying configuration changes
 
 If you change the configuration, run `kamal deploy` to deploy the changes to the server. It takes about 60 seconds.
