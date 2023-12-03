@@ -1,0 +1,53 @@
+# Name of your site. Used to uniquely configure containers.
+service: site2
+
+# Name of the container image.
+image: igorj/site2
+
+# Deploy to these servers.
+servers:
+  web:
+    hosts:
+      - 195.201.135.250
+    labels:
+      traefik.http.routers.domain2.rule: Host(`site2.masterybits.com`)
+      traefik.http.routers.domain2.entrypoints: websecure
+      traefik.http.routers.domain2.tls.certresolver: letsencrypt
+
+# Use GIT_URL from env to auto-update site via git pulls.
+# Remember to run `kamal env push` after making changes!
+env:
+  secret:
+    - GIT_URL
+
+# Credentials for your image host.
+registry:
+  # Specify the registry server, if you're not using Docker Hub
+  # server: registry.digitalocean.com / ghcr.io / ...
+  username: igorj
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Check /up against 80
+healthcheck:
+  port: 80
+
+# Configure custom arguments for Traefik
+traefik:
+  options:
+    publish:
+      - "443:443"
+    volume:
+      - "/letsencrypt/acme.json:/letsencrypt/acme.json"
+  args:
+    entryPoints.web.address: ":80"
+    entryPoints.websecure.address: ":443"
+    entryPoints.web.http.redirections.entryPoint.to: websecure
+    entryPoints.web.http.redirections.entryPoint.scheme: https
+    entryPoints.web.http.redirections.entrypoint.permanent: true
+    entrypoints.websecure.http.tls: true
+    entrypoints.websecure.http.tls.domains[1].main: "site2.masterybits.com"
+    certificatesResolvers.letsencrypt.acme.email: "igorj@hey.com"
+    certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json"
+    certificatesResolvers.letsencrypt.acme.httpchallenge: true
+    certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web
