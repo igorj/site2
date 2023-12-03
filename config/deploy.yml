@@ -10,9 +10,9 @@ servers:
     hosts:
       - 195.201.135.250
     labels:
-      traefik.http.routers.site.rule: Host(`site2.masterybits.com`)
-      traefik.http.routers.site.entrypoints: websecure
-      traefik.http.routers.site.tls.certresolver: letsencrypt
+      traefik.http.routers.site2.rule: Host(`site2.masterybits.com`)
+      traefik.http.routers.site2.entrypoints: websecure
+      traefik.http.routers.site2.tls.certresolver: letsencrypt
 
 # Use GIT_URL from env to auto-update site via git pulls.
 # Remember to run `kamal env push` after making changes!
